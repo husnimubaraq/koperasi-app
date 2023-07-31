@@ -52,9 +52,11 @@ onMounted(() => {
       
       <div class="">
         <div class="flex items-center gap-x-3">
-          <div class="relative cursor-pointer hover:text-white">
-            <BellCircle/>
-          </div>
+          <router-link to="/notifikasi" class="">
+            <div class="relative cursor-pointer hover:text-white">
+              <BellCircle/>
+            </div>
+          </router-link>
 
           <Menu as="div" class="text-left relative">
             <div>
