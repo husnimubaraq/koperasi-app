@@ -11,16 +11,6 @@
 - Headless UI for base component (dropdown, overlay, etc)
 - Axios for data fetching
 
-## Try it now!
-
-### Clone to local
-
-```bash
-    npx degit hasan-almujtaba/vue3-ssg-starter my-app
-    cd my-app
-    yarn
-```
-    
 ## Usage
 
 ### Development
