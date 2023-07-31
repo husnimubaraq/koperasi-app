@@ -1,23 +1,34 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
-import { usePembayaranStore } from '../../stores/pembayaran';
-import { TPembayaran } from '../../types/pembayaran.interface';
+import { useAuthStore } from '~/stores/auth';
+import {API_URL} from '~/apis/index'
+import { useToast } from 'vue-toast-notification';
 
+const toast = useToast()
 const { query } = useRoute()
+const router = useRouter()
 
-const pembayaranStore = usePembayaranStore()
+const autStore = useAuthStore()
 
-function receiveMessage (event) {
-    console.log(event.data)
-}
+const {
+  user
+} = storeToRefs(autStore)
+
+const eventSource = new EventSource(`${API_URL}transaction/sse?access_token=${user?.value?.access_token}`);
 
 onMounted(() => {
-  window.addEventListener('message', receiveMessage)
-}) 
-onBeforeUnmount(() => {
-  {
-  window.removeEventListener('message', receiveMessage)
-  }
+  eventSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if(data.message.status){
+        if(data.message.payment_status === "Sudah Bayar"){
+          eventSource.close()
+          toast.success("Pebayaran berhasil", {
+            position: 'top'
+          })
+          router.replace('/tagihan')
+        }
+      }
+  };
 })
 
 

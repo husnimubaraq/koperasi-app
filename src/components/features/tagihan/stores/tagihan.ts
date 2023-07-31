@@ -1,12 +1,13 @@
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { getTagihanRequest, createTagihanRequest } from '../apis/tagihan'
+import { getTagihanRequest, createTagihanRequest, getTagihanDetailRequest } from '../apis/tagihan'
 import { Item } from 'vue3-easy-data-table'
-import { TTagihanForm } from '../types/tagihan.interface'
+import { TTagihanForm, TTagihanDetail } from '../types/tagihan.interface'
 
 
 export const useTagihanStore = defineStore('tagihan', {
     state: () => ({
         data: [] as Item[],
+        tagihan: {} as TTagihanDetail,
         page: 1,
         per_page: 5,
         total_page: 12,
@@ -23,6 +24,13 @@ export const useTagihanStore = defineStore('tagihan', {
             if(data.status){
                 this.data = data.result.data
                 this.total_page = data.result.total
+            }
+        },
+        async getTagihanDetail(id: number) {
+            const { data } = await getTagihanDetailRequest(id)
+
+            if(data.status){
+                this.tagihan = data.result
             }
         },
         async createTagihan(params: TTagihanForm) {
