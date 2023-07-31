@@ -1,7 +1,5 @@
 # Koperasi App
 
-[Vue 3 SSG starter](https://vue3-ssg.netlify.app) implementation
-
 ## Tools Used
 - Vite
 - Vue 3 with composition api + Typescript & Yarn
