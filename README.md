@@ -1,7 +1,4 @@
-[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
-![GitHub Repo stars](https://img.shields.io/github/stars/hasan-almujtaba/vue3-ssg-starter)
-![GitHub forks](https://img.shields.io/github/forks/hasan-almujtaba/vue3-ssg-starter)
-# Simple Blog
+# Koperasi App
 
 [Vue 3 SSG starter](https://vue3-ssg.netlify.app) implementation
 
@@ -16,15 +13,7 @@
 - Headless UI for base component (dropdown, overlay, etc)
 - Axios for data fetching
 
-## Demo
-
-[Demo](https://simple-blog-vue-3-ssg-starter.vercel.app/)
-
 ## Try it now!
-
-### Github Template
-
-[Create repo from this template](https://github.com/hasan-almujtaba/vue3-ssg-starter/generate)
 
 ### Clone to local
 
