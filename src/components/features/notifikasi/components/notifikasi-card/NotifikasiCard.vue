@@ -4,11 +4,11 @@
 
 <template>
     <div class="mb-3">
-        <p>Pembayaran</p>
+        <p class="text-sm text-gray-500">Pembayaran</p>
 
-        <div class="flex items-center justify-between">
-            <p class="text-3xl capitalize mb-4 font-semibold">Pembayaran anda telah berhasil, detail informasi</p>
-            <p class="text-3xl capitalize mb-4 font-semibold">11 September 2022</p>
+        <div class="flex items-center justify-between border border-black p-3 rounded-md mt-2">
+            <p class=" capitalize font-medium">Pembayaran anda telah berhasil, detail informasi</p>
+            <p class=" capitalize font-medium">11 September 2022</p>
         </div>
     </div>
 </template>
