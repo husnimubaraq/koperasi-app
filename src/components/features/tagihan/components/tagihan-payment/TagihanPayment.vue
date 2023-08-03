@@ -4,26 +4,32 @@ import { useToast } from 'vue-toast-notification';
 import { usePembayaranStore } from '../../stores/pembayaran';
 import { TPembayaran } from '../../types/pembayaran.interface';
 import { useAuthStore } from '~/stores/auth';
+import { useTagihanStore } from '../../stores/tagihan';
 
 const route = useRoute()
 const toast = useToast()
 
 const pembayaranStore = usePembayaranStore()
+const tagihanStore = useTagihanStore()
 const userStore = useAuthStore()
+
+const {
+    tagihan
+} = storeToRefs(tagihanStore)
 
 const {
     data,
     responseStatus,
-    error
+    error,
 } = storeToRefs(pembayaranStore)
 
 function onSelect(item: TPembayaran){
   pembayaranStore.createPemabyaran({
     user_id: userStore.user?.id as number,
-    nominal: Number("300000.00"),
-    denda: Number("2000.00"),
-    no_tagihan: 'TX-20230730173739',
-    jenis_tagihan: 'tagihan',
+    nominal: Number(tagihan.value.nominal),
+    denda: Number(tagihan.value.denda),
+    no_tagihan: tagihan.value.no_tagihan,
+    jenis_tagihan: tagihan.value.jenis_tagihan,
     name: item.name,
     group: item.group,
     code: item.code
@@ -31,6 +37,7 @@ function onSelect(item: TPembayaran){
 }
 
 const getData = async() => {
+  tagihanStore.getTagihanDetail(route?.params?.id)
   pembayaranStore.getPembayaran()
 }
 
