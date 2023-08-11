@@ -18,7 +18,7 @@ const isAdmin = user?.role === 'admin'
         </div>
         <div v-else>
           <div class="flex">
-            <base-button variant="primary" to="tagihan/tambah-tagihan">
+            <base-button variant="primary" to="/tagihan/tambah-tagihan">
               <p class="mx-5">Tambah</p>
             </base-button>
           </div>
