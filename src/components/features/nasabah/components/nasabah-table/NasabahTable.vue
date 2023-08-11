@@ -47,11 +47,6 @@ onMounted(() => {
         <div class="relative">
             <EasyDataTable v-model:server-options="serverOptions" :headers="headers" :items="data"
                 table-class-name="customize-table">
-                <template #item-action="">
-                    <BaseButton variant="primary">
-                        Konfirmasi
-                    </BaseButton>
-                </template>
             </EasyDataTable>
         </div>
     </div>

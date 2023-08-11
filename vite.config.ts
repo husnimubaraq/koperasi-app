@@ -27,7 +27,7 @@ export default defineConfig({
         '@vueuse/head',
         '@vueuse/core',
       ],
-      dts: 'src/auto-imports.d.ts',
+      // dts: 'src/auto-imports.d.ts',
     }),
     Components({
       dts: true,

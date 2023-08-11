@@ -60,7 +60,7 @@ onMounted(() => {
         <div v-if="!isAdmin">
           <BaseButton
             v-if="status === 'Belum Bayar'"
-            :to="`tagihan/${id}/pembayaran`"
+            :to="`/tagihan/${id}/pembayaran`"
             variant="primary"
           >
             <p 

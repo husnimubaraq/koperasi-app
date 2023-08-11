@@ -1,8 +1,15 @@
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/auth';
 import { breakpointsTailwind } from '@vueuse/core'
+import { useNotifikasiStore } from './features/notifikasi/stores/notifikasi';
+import { storeToRefs } from 'pinia';
 
 const { user, getProfile, logout } = useAuthStore()
+const { getNotifikasiCount } = useNotifikasiStore()
+
+const {
+  count
+} = storeToRefs(useNotifikasiStore())
 
 const breakpoints = useBreakpoints(breakpointsTailwind)
 
@@ -16,6 +23,7 @@ function onLogout(){
 
 onMounted(() => {
   getProfile()
+  getNotifikasiCount()
 })
 
 </script>
@@ -55,6 +63,11 @@ onMounted(() => {
           <router-link to="/notifikasi" class="">
             <div class="relative cursor-pointer hover:text-white">
               <BellCircle/>
+              <div class="absolute -top-2 -right-2">
+                <div class="h-5 w-5 rounded-full bg-[#ff0000] flex flex-col items-center justify-center">
+                  <p class="text-[10px] text-white">{{ count }}</p>
+                </div>
+              </div>
             </div>
           </router-link>
 
