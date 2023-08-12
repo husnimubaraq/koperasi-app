@@ -19,10 +19,10 @@
     "pinia": "^2.0.10",
     "tailwind-merge": "^1.14.0",
     "ts-node": "^10.5.0",
-    "vue": "^3.2.25",
+    "vue": "^3.2.45",
     "vue-router": "^4.0.12",
     "vue-toast-notification": "^3.1.1",
-    "vue3-easy-data-table": "^1.5.47"
+    "vue3-easy-data-table": "^1.5.17"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.16.0",
