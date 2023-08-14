@@ -20,6 +20,7 @@ const addressRef = ref("");
 const jaminanRef = ref("");
 const alasanRef = ref("");
 const nominalRef = ref("");
+const id_jaminanRef = ref("");
 
 function onSubmit() {
   pengajuanStore.createPengajuan({
@@ -29,6 +30,7 @@ function onSubmit() {
     alasan: alasanRef.value,
     no_hp: phoneRef.value as string,
     nominal: nominalRef.value,
+    id_jaminan: id_jaminanRef.value,
   });
 }
 
@@ -110,6 +112,18 @@ watchEffect(() => {
       >
         <div v-if="errors.jaminan">
           <div v-for="item in errors.jaminan">
+            <p class="text-sm text-red-600">{{ item }}</p>
+          </div>
+        </div>
+      </BaseInput>
+      <BaseInput
+        id="id_jaminan"
+        label="No ID Jaminan"
+        placeholder="Contoh : nomor BPKB"
+        v-model:model-value="id_jaminanRef"
+      >
+        <div v-if="errors.id_jaminan">
+          <div v-for="item in errors.id_jaminan">
             <p class="text-sm text-red-600">{{ item }}</p>
           </div>
         </div>

@@ -11,6 +11,7 @@ const toast = useToast();
 const { data, page, per_page, responseStatus } = storeToRefs(pengajuanStore);
 
 const headers: Header[] = [
+  { text: "NIK", value: "nik" },
   { text: "Nama", value: "name" },
   { text: "Email", value: "email" },
   { text: "No Handphone", value: "no_hp" },
@@ -18,6 +19,7 @@ const headers: Header[] = [
   { text: "Jaminan Pinjaman", value: "jaminan" },
   { text: "Jumlah Nominal", value: "nominal" },
   { text: "Alasan Pengajuan", value: "alasan" },
+  { text: "Keterangan", value: "status" },
   { text: "Action", value: "action", width: 250 },
 ];
 
@@ -65,25 +67,37 @@ watchEffect(() => {
         table-class-name="customize-table"
       >
         <template #item-action="{ id, is_status, status }">
-          <div v-if="!is_status || is_status === '0'" class="flex gap-x-3">
-            <div class="w-full">
-              <BaseButton @click="updateAction(id, 'tolak')" variant="warning">
-                Tolak
+          <div v-if="status != 'ditolak'" class="flex gap-x-3">
+            <div v-if="is_status == '0'" class="w-full">
+              <BaseButton @click="updateAction(id, 'tinjau')" variant="green">
+                Tinjau
               </BaseButton>
             </div>
-            <div class="w-full">
-              <BaseButton
-                @click="updateAction(id, 'konfirmasi')"
-                variant="primary"
-              >
-                Konfirmasi
-              </BaseButton>
+            <div v-if="status == 'ditinjau'">
+              <div class="w-full">
+                <BaseButton
+                  class="p-1"
+                  @click="updateAction(id, 'tolak')"
+                  variant="warning"
+                >
+                  Tolak
+                </BaseButton>
+              </div>
+              <div class="w-full">
+                <BaseButton
+                  @click="updateAction(id, 'konfirmasi')"
+                  variant="primary"
+                >
+                  Konfirmasi
+                </BaseButton>
+              </div>
             </div>
           </div>
 
-          <div v-else class="capitalize">
+          <!-- ON HOLD status failed -->
+          <!-- <div v-else class="capitalize">
             {{ status }}
-          </div>
+          </div> -->
         </template>
       </EasyDataTable>
     </div>
