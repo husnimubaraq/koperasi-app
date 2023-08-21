@@ -3,6 +3,7 @@ import { storeToRefs } from "pinia";
 import { useToast } from "vue-toast-notification";
 import { useTagihanStore } from "../../stores/tagihan";
 import { usePengajuanStore } from "~/components/features/pengajuan/stores/pengajuan";
+import { dateFormatter } from "~/utils/dayjs";
 
 const router = useRouter();
 const toast = useToast();
@@ -27,18 +28,31 @@ const dateRef = ref("");
 const dendaRef = ref("");
 const jumlahRef = ref("");
 
+const dateNow = dateFormatter({
+  dateTime: new Date(),
+  format: 'YYYY-MM-DD'
+})
+
 function onSubmit() {
   const pengajuan = dataPengajuan.value.find(
     (x: any) => x.value === pengajuanRef.value.value
   );
 
-  tagihanStore.createTagihan({
-    user_id: pengajuan?.item?.user_id as any,
-    pengajuan_id: pengajuan?.item?.id as number,
-    nominal: Number(jumlahRef.value),
-    nominal_denda: Number(dendaRef.value),
-    tgl_tagihan: dateRef.value,
-  });
+  console.log('dateRef.value: ', dateRef.value)
+
+  if(dateRef.value < dateNow){
+    toast.error("Tanggal tidak boleh kurang dari waktu sekarang", {
+        position: "top",
+      });
+  }else{
+    tagihanStore.createTagihan({
+      user_id: pengajuan?.item?.user_id as any,
+      pengajuan_id: pengajuan?.item?.id as number,
+      nominal: Number(jumlahRef.value),
+      nominal_denda: Number(dendaRef.value),
+      tgl_tagihan: dateRef.value,
+    });
+  }
 }
 
 watchEffect(() => {
@@ -61,6 +75,7 @@ watchEffect(() => {
     }
   }
 });
+
 </script>
 
 <template>

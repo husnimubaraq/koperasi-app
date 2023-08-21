@@ -26,13 +26,10 @@ export interface TPembayaranForm {
     no_tagihan: string
     nominal: number
     denda: number
-    group: string
-    code: string
-    name: string
-    jenis_tagihan: string
 }
 
 export interface TPembayaranResult {
+    snap_url: string
     reference: string
     merchant_ref: string
     payment_selection_type: string

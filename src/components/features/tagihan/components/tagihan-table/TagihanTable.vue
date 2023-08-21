@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import { useTagihanStore } from '../../stores/tagihan';
+import { useToast } from 'vue-toast-notification';
 import { Header } from "vue3-easy-data-table";
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '~/stores/auth';
 import EasyDataTable from 'vue3-easy-data-table'
+import { usePembayaranStore } from '../../stores/pembayaran';
+import { API_URL } from '~/apis';
 
 const tagihanStore = useTagihanStore()
+const pembayaranStore = usePembayaranStore()
+
+const toast = useToast()
 
 const { user } = useAuthStore()
 
@@ -14,8 +20,13 @@ const isAdmin = user?.role === 'admin'
 const {
     data,
     page,
-    per_page
+    per_page,
 } = storeToRefs(tagihanStore)
+
+const {
+    responseStatus,
+    error,
+} = storeToRefs(pembayaranStore)
 
 const headers: Header[] = isAdmin ? [
   { text: "Nama", value: "name" },
@@ -36,15 +47,45 @@ const serverOptions = {
   rowsPerPage: per_page,
 }
 
-const getData = async() => {
-  tagihanStore.getTagihan()
-
+const onPay = async(id: number) => {
+  const tagihan = data.value.find(x => x.id === id)
+  pembayaranStore.createPemabyaran({
+    user_id: user?.id as number,
+    nominal: Number(tagihan.nominal),
+    denda: Number(tagihan.denda),
+    no_tagihan: tagihan.no_tagihan,
+  }, id)
 }
 
+const getData = async() => {
+  tagihanStore.getTagihan()
+}
+
+const eventSource = new EventSource(`${API_URL}transaction/sse?access_token=${user?.access_token}`);
+
 onMounted(() => {
+
   getData()
 })
 
+watchEffect(() => {
+
+  eventSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log('data: ', data)
+      if(data.message.status){
+        getData()
+      }
+  };
+
+  if (!responseStatus.value) {
+    if(error.value){
+      toast.error(error.value, {
+          position: 'top'
+      })
+    }
+  }
+})
 
 </script>
 
@@ -60,8 +101,9 @@ onMounted(() => {
         <div v-if="!isAdmin">
           <BaseButton
             v-if="status === 'Belum Bayar'"
-            :to="`/tagihan/${id}/pembayaran`"
             variant="primary"
+            class="w-[100px]"
+            @click="onPay(id)"
           >
             <p 
               variant="primary"

@@ -18,19 +18,23 @@ export const usePembayaranStore = defineStore('pembayaran', {
                 this.data = data.result
             }
         },
-        async createPemabyaran(params: TPembayaranForm) {
+        async createPemabyaran(params: TPembayaranForm, id: number) {
 
             const OS = detectOS()
 
             try {
                 const { data } = await createPembayaranRequest(params)
 
-                this.$router.push({
-                    path: OS == "Win" ? '/pembayaran/invoice' : 'pembayaran/invoice',
-                    query: {
-                      url: data.result.checkout_url
-                    }
-                })
+                // this.$router.push({
+                //     path: OS == "Win" ? '/pembayaran/invoice' : `tagihan/${id}/pembayaran/invoice`,
+                //     query: {
+                //       url: data.result.snap_url
+                //     }
+                // })
+
+                const url = data.result.snap_url
+
+                window.open(url, '_blank')
 
             } catch (err: any) {
                 const { response } = err

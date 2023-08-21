@@ -55,7 +55,7 @@ watchEffect(() => {
 
 <template>
   <div class="container p-10 flex-1">
-    <div class="pb-8 w-[80%] mb-5">
+    <div class="pb-8 w-[100%] mb-5">
       <p class="text-3xl capitalize mb-4 font-semibold">Daftar Pengajuan</p>
     </div>
 
@@ -69,14 +69,18 @@ watchEffect(() => {
         <template #item-action="{ id, is_status, status }">
           <div v-if="status != 'ditolak'" class="flex gap-x-3">
             <div v-if="is_status == '0'" class="w-full">
-              <BaseButton @click="updateAction(id, 'tinjau')" variant="green">
+              <BaseButton 
+                class="p-1 w-[100px]"
+                @click="updateAction(id, 'tinjau')" 
+                variant="green"
+              >
                 Tinjau
               </BaseButton>
             </div>
             <div v-if="status == 'ditinjau'">
               <div class="w-full">
                 <BaseButton
-                  class="p-1"
+                  class="p-1 w-[100px]"
                   @click="updateAction(id, 'tolak')"
                   variant="warning"
                 >
@@ -85,6 +89,7 @@ watchEffect(() => {
               </div>
               <div class="w-full">
                 <BaseButton
+                  class="p-1 w-[100px]"
                   @click="updateAction(id, 'konfirmasi')"
                   variant="primary"
                 >

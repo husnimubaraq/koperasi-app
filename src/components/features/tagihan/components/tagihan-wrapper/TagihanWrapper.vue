@@ -8,7 +8,7 @@ const isAdmin = user?.role === "admin";
 
 <template>
   <div class="container p-10 flex-1">
-    <div class="border-b border-black pb-8 w-[80%] mb-5">
+    <div class="border-b border-black pb-8 w-[100%] mb-5">
       <p class="text-3xl capitalize mb-4 font-semibold">Tagihan</p>
       <div v-if="!isAdmin">
         <p class="text-2xl capitalize">{{ user?.name }}</p>

@@ -33,7 +33,7 @@ function onSelect(item: TPembayaran){
     name: item.name,
     group: item.group,
     code: item.code
-  })
+  }, 2)
 }
 
 const getData = async() => {
@@ -59,7 +59,7 @@ watchEffect(() => {
 
 <template>
   <div class="container p-10 flex-1 md:w-[50%]">
-    <div class=" w-[80%] mb-5">
+    <div class=" w-[100%] mb-5">
         <p class="text-3xl capitalize mb-4 font-semibold">Pembayaran</p>
     </div>
 
