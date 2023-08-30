@@ -19,13 +19,14 @@ const phoneRef = ref("");
 const addressRef = ref("");
 const jaminanRef = ref("");
 const alasanRef = ref("");
-const nominalRef = ref("");
 const id_jaminanRef = ref("");
+
+const nominalRef = ref("");
 
 function onSubmit() {
   pengajuanStore.createPengajuan({
     user_id: profile.value?.id as number,
-    // alamat: addressRef.value,
+    alamat: addressRef.value,
     jaminan: jaminanRef.value,
     alasan: alasanRef.value,
     no_hp: phoneRef.value as string,
@@ -33,6 +34,13 @@ function onSubmit() {
     id_jaminan: id_jaminanRef.value,
   });
 }
+
+const dataBulan = Array.from({ length: 12 }, (_, index) => ({
+  name: `${index + 1} Bulan`,
+  value: index + 1,
+}));
+
+const bulanRef = ref(dataBulan[0]);
 
 watchEffect(() => {
   nameRef.value = profile.value?.name as string;
@@ -130,11 +138,11 @@ watchEffect(() => {
         </div>
       </BaseInput>
       <BaseInput
-        type="number"
+        type="text"
         id="nominal"
         label="Jumlah Nominal Pengajuan"
         placeholder="Masukan Nominal Pengajuan"
-        v-model:model-value="nominalRef"
+        v-model:modelValue="nominalRef"
       >
         <div v-if="errors.nominal">
           <div v-for="item in errors.nominal">
@@ -156,6 +164,12 @@ watchEffect(() => {
           </div>
         </div>
       </BaseInput>
+      <BaseSelect
+        id="bulan"
+        label="Berapa Lama"
+        v-model:model-value="bulanRef"
+        :data="dataBulan"
+      />
 
       <BaseButton variant="primary" @click="onSubmit" type="submit">
         Kirim Pengajuan
