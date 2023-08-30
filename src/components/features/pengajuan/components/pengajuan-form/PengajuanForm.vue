@@ -3,7 +3,7 @@ import { storeToRefs } from "pinia";
 import { useAuthStore } from "~/stores/auth";
 import { usePengajuanStore } from "../../stores/pengajuan";
 import { useToast } from "vue-toast-notification";
-
+import { formatCurrency } from "~/utils/rupiah";
 const router = useRouter();
 const toast = useToast();
 
@@ -22,15 +22,40 @@ const alasanRef = ref("");
 const id_jaminanRef = ref("");
 
 const nominalRef = ref("");
+// Function to format the input value to IDR currency
+function formatNominal(event: InputEvent) {
+  const numericValue = parseFloat(
+    (event.target as HTMLInputElement).value.replace(/[^\d\.]/g, "")
+  );
+
+  if (!isNaN(numericValue)) {
+    nominalRef.value = formatCurrency(numericValue);
+  } else {
+    nominalRef.value = "";
+  }
+}
+function parseFormattedValueToString(formattedValue: string): string {
+  // Remove non-numeric characters and convert to number
+  const numericValue = parseFloat(
+    formattedValue.replace(/[^0-9,-]/g, "").replace(",", ".")
+  );
+
+  // Format the number without decimal places and thousands separators
+  return numericValue.toLocaleString("id-ID", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
+}
 
 function onSubmit() {
+  const formattedNominal = parseFormattedValueToString(nominalRef.value);
   pengajuanStore.createPengajuan({
     user_id: profile.value?.id as number,
     alamat: addressRef.value,
     jaminan: jaminanRef.value,
     alasan: alasanRef.value,
     no_hp: phoneRef.value as string,
-    nominal: nominalRef.value,
+    nominal: formattedNominal,
     id_jaminan: id_jaminanRef.value,
   });
 }
@@ -143,6 +168,7 @@ watchEffect(() => {
         label="Jumlah Nominal Pengajuan"
         placeholder="Masukan Nominal Pengajuan"
         v-model:modelValue="nominalRef"
+        @input="formatNominal"
       >
         <div v-if="errors.nominal">
           <div v-for="item in errors.nominal">
