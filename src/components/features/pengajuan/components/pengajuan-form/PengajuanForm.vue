@@ -25,7 +25,7 @@ const id_jaminanRef = ref("");
 function onSubmit() {
   pengajuanStore.createPengajuan({
     user_id: profile.value?.id as number,
-    alamat: addressRef.value,
+    // alamat: addressRef.value,
     jaminan: jaminanRef.value,
     alasan: alasanRef.value,
     no_hp: phoneRef.value as string,
@@ -38,6 +38,7 @@ watchEffect(() => {
   nameRef.value = profile.value?.name as string;
   emailRef.value = profile.value?.email as string;
   phoneRef.value = profile.value?.no_hp as string;
+  addressRef.value = profile.value?.alamat as string;
   if (responseStatus.value) {
     toast.success("Pengagajuan Berhasil", {
       position: "top",
