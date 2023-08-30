@@ -13,7 +13,8 @@ const isAdmin = user?.role === "admin";
       <div v-if="!isAdmin">
         <p class="text-2xl capitalize">{{ user?.name }}</p>
         <p class="">Nasabah</p>
-        <p class="mt-2 text-gray-400">Anda memiliki tagihan sebesar Rp -</p>
+        <p class="mt-2 text-gray-400">Jika ada kesalahan tagihan pinjaman 
+            dan masalah pembayaran silahkan hubungi pegawai koperasi</p>
       </div>
       <div v-else>
         <div class="flex">

@@ -17,7 +17,7 @@ const headers: Header[] = [
     { text: "Email", value: "email" },
     { text: "No Handphone", value: "no_hp" },
     { text: "Alamat", value: "alamat" },
-    { text: "Tanggal Lahir", value: "tanggal_lahir" },
+    { text: "Tanggal Lahir", value: "tgl_lahir" },
     { text: "Action", value: "action" },
 ];
 

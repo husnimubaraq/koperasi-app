@@ -17,6 +17,7 @@ const headers: Header[] = [
   { text: "No Handphone", value: "no_hp" },
   { text: "Alamat", value: "alamat" },
   { text: "Jaminan Pinjaman", value: "jaminan" },
+  { text: "No ID Jaminan", value: "id_jaminan" },
   { text: "Jumlah Nominal", value: "nominal" },
   { text: "Alasan Pengajuan", value: "alasan" },
   { text: "Keterangan", value: "status" },
