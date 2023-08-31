@@ -172,6 +172,8 @@ watchEffect(() => {
         @input="formatNominalJumlah"
       >
       </BaseInput>
+      
+      <p class="text-[#f00000] text-sm -mt-3">Catatan: bunga koperasi 1%</p>
 
       <BaseButton variant="primary" @click="onSubmit" type="submit">
         Tagih
