@@ -21,8 +21,6 @@ const jaminanRef = ref("");
 const alasanRef = ref("");
 const id_jaminanRef = ref("");
 
-
-
 const nominalRef = ref(0);
 const numericValueRef = ref(0);
 // Function to format the input value to IDR currency
@@ -66,12 +64,9 @@ function onSubmit() {
     no_hp: phoneRef.value as string,
     nominal: formattedNominal,
     id_jaminan: id_jaminanRef.value,
-    bulan : bulanRef.value.value,
+    bulan: bulanRef.value.value,
   });
 }
-
-
-
 
 watchEffect(() => {
   nameRef.value = profile.value?.name as string;
@@ -183,6 +178,7 @@ watchEffect(() => {
         </div>
       </BaseInput>
 
+      <p class="text-[#f00000] text-sm -mt-3">Catatan: bunga koperasi 1%</p>
       <BaseInput
         container-class-name="mb-4"
         id="alasan"
