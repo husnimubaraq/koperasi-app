@@ -73,8 +73,6 @@ function onSubmit() {
     (x: any) => x.value === pengajuanRef.value.value
   );
 
-  console.log("dateRef.value: ", dateRef.value);
-
   if (dateRef.value < dateNow) {
     toast.error("Tanggal tidak boleh kurang dari waktu sekarang", {
       position: "top",
@@ -89,6 +87,19 @@ function onSubmit() {
     });
   }
 }
+
+watchEffect(() => {
+  if(pengajuanRef.value ){
+    if(pengajuanRef.value.item){
+      const nominal = Number(pengajuanRef.value.item?.nominal.replace(/[^\d]/g, ""))
+      const bulan = pengajuanRef.value.item.bulan ? pengajuanRef.value.item.bulan : 1
+
+      const jumlah = (nominal /  bulan).toFixed(0)
+      
+      jumlahRef.value = jumlah
+    }
+  }
+});
 
 watchEffect(() => {
   pengajuanStore.getPengajuanFormat();
