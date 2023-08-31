@@ -95,8 +95,14 @@ watchEffect(() => {
       const bulan = pengajuanRef.value.item.bulan ? pengajuanRef.value.item.bulan : 1
 
       const jumlah = (nominal /  bulan).toFixed(0)
+      const denda = (nominal * 0.01) / bulan
+      console.log('denda: ', denda)
+
+      const totalJumlah = jumlah + denda
+      console.log('totalJumlah: ', totalJumlah)
       
-      jumlahRef.value = jumlah
+      dendaRef.value = formatCurrency(denda)
+      jumlahRef.value = formatCurrency(jumlah)
     }
   }
 });
@@ -148,9 +154,9 @@ watchEffect(() => {
 
       <BaseInput
         type="text"
-        id="denda"
-        label="Denda"
-        placeholder="Masukan Denda"
+        id="bunga"
+        label="Bunga"
+        placeholder="Masukan Bunga"
         v-model:model-value="dendaRef"
         @input="formatNominalDenda"
       >
@@ -160,12 +166,14 @@ watchEffect(() => {
         container-class-name="mb-3"
         type="text"
         id="jumlah"
-        label="Jumlah"
+        label="Tagihan"
         placeholder="Masukan Jumlah"
         v-model:model-value="jumlahRef"
         @input="formatNominalJumlah"
       >
       </BaseInput>
+      
+      <p class="text-[#f00000] text-sm -mt-3">Catatan: bunga koperasi 1%</p>
 
       <BaseButton variant="primary" @click="onSubmit" type="submit">
         Tagih
