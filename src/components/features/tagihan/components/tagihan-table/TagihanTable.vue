@@ -7,6 +7,7 @@ import { useAuthStore } from "~/stores/auth";
 import EasyDataTable from "vue3-easy-data-table";
 import { usePembayaranStore } from "../../stores/pembayaran";
 import { API_URL } from "~/apis";
+import { formatCurrency } from "~/utils/rupiah";
 
 const tagihanStore = useTagihanStore();
 const pembayaranStore = usePembayaranStore();
@@ -25,14 +26,17 @@ const headers: Header[] = isAdmin
   ? [
       { text: "Nama", value: "name" },
       { text: "Tanggal", value: "tgl_tagihan" },
-      { text: "Denda", value: "denda" },
-      { text: "Jumlah", value: "nominal" },
+      { text: "Bunga", value: "denda" },
+      { text: "Tagihan", value: "nominal" },
+      { text: "Jumlah", value: "jumlah" },
       { text: "Setoran", value: "bulan" },
       { text: "Status", value: "status" },
     ]
   : [
       { text: "Tipe", value: "jenis_tagihan" },
-      { text: "Jumlah", value: "nominal" },
+      { text: "Bunga", value: "denda" },
+      { text: "Tagihan", value: "nominal" },
+      { text: "Jumlah", value: "jumlah" },
       { text: "Tanggal", value: "tgl_tagihan" },
       { text: "No Pembayaran", value: "no_tagihan" },
       { text: "Setoran", value: "bulan" },
@@ -95,6 +99,15 @@ watchEffect(() => {
       :items="data"
       table-class-name="customize-table"
     >
+      <template #item-denda="{ denda }">
+        <p>{{ formatCurrency(denda) }}</p>
+      </template>
+      <template #item-nominal="{ nominal }">
+        <p>{{ formatCurrency(nominal) }}</p>
+      </template>
+      <template #item-jumlah="{ nominal, denda }">
+        <p>{{ formatCurrency((Number(nominal) + Number(denda))) }}</p>
+      </template>
       <template #item-status="{ status, id }">
         <div v-if="!isAdmin">
           <BaseButton
