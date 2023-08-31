@@ -21,6 +21,8 @@ const jaminanRef = ref("");
 const alasanRef = ref("");
 const id_jaminanRef = ref("");
 
+
+
 const nominalRef = ref(0);
 const numericValueRef = ref(0);
 // Function to format the input value to IDR currency
@@ -47,6 +49,13 @@ function parseFormattedValueToString(formattedValue: string): string {
   });
 }
 
+const dataBulan = Array.from({ length: 12 }, (_, index) => ({
+  name: `${index + 1} Bulan`,
+  value: index + 1,
+}));
+
+const bulanRef = ref(dataBulan[0]);
+
 function onSubmit() {
   const formattedNominal = parseFormattedValueToString(nominalRef.value);
   pengajuanStore.createPengajuan({
@@ -57,15 +66,12 @@ function onSubmit() {
     no_hp: phoneRef.value as string,
     nominal: formattedNominal,
     id_jaminan: id_jaminanRef.value,
+    bulan : bulanRef.value.value,
   });
 }
 
-const dataBulan = Array.from({ length: 12 }, (_, index) => ({
-  name: `${index + 1} Bulan`,
-  value: index + 1,
-}));
 
-const bulanRef = ref(dataBulan[0]);
+
 
 watchEffect(() => {
   nameRef.value = profile.value?.name as string;
