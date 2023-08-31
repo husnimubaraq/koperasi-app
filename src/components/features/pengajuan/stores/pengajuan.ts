@@ -37,7 +37,7 @@ export const usePengajuanStore = defineStore('pengajuan', {
                 this.dataSelect = data.result.data.filter(
                     x => x.status === 'dikonfirmasi'
                 ).map(item => ({
-                    name: item.name,
+                    name: `${item.name} - ${item.nominal} ${item.bulan ? ' - ' + item.bulan + ' bulan' : '' }`,
                     value: item.id,
                     item: item
                 }))
