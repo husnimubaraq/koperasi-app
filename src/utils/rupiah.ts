@@ -2,6 +2,8 @@ export function formatCurrency(amount: number | string): string {
   const formatter = new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   });
 
   // Remove any non-numeric characters from the input

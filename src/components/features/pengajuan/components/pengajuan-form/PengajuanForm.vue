@@ -21,19 +21,19 @@ const jaminanRef = ref("");
 const alasanRef = ref("");
 const id_jaminanRef = ref("");
 
-const nominalRef = ref("");
+const nominalRef = ref(0);
+const numericValueRef = ref(0);
 // Function to format the input value to IDR currency
 function formatNominal(event: InputEvent) {
-  const numericValue = parseFloat(
-    (event.target as HTMLInputElement).value.replace(/[^\d\.]/g, "")
-  );
+  const rawValue = (event.target as HTMLInputElement).value;
 
-  if (!isNaN(numericValue)) {
-    nominalRef.value = formatCurrency(numericValue);
-  } else {
-    nominalRef.value = "";
-  }
+  // Remove non-numeric characters and convert to number
+  numericValueRef.value = parseFloat(rawValue.replace(/[^\d]/g, ""));
+
+  // Format the numeric value as Indonesian Rupiah (IDR) currency
+  nominalRef.value = formatCurrency(numericValueRef.value);
 }
+// parsing
 function parseFormattedValueToString(formattedValue: string): string {
   // Remove non-numeric characters and convert to number
   const numericValue = parseFloat(

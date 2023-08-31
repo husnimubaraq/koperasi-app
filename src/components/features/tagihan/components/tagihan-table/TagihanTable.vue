@@ -1,92 +1,90 @@
 <script setup lang="ts">
-import { useTagihanStore } from '../../stores/tagihan';
-import { useToast } from 'vue-toast-notification';
+import { useTagihanStore } from "../../stores/tagihan";
+import { useToast } from "vue-toast-notification";
 import { Header } from "vue3-easy-data-table";
-import { storeToRefs } from 'pinia';
-import { useAuthStore } from '~/stores/auth';
-import EasyDataTable from 'vue3-easy-data-table'
-import { usePembayaranStore } from '../../stores/pembayaran';
-import { API_URL } from '~/apis';
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "~/stores/auth";
+import EasyDataTable from "vue3-easy-data-table";
+import { usePembayaranStore } from "../../stores/pembayaran";
+import { API_URL } from "~/apis";
 
-const tagihanStore = useTagihanStore()
-const pembayaranStore = usePembayaranStore()
+const tagihanStore = useTagihanStore();
+const pembayaranStore = usePembayaranStore();
 
-const toast = useToast()
+const toast = useToast();
 
-const { user } = useAuthStore()
+const { user } = useAuthStore();
 
-const isAdmin = user?.role === 'admin'
+const isAdmin = user?.role === "admin";
 
-const {
-    data,
-    page,
-    per_page,
-} = storeToRefs(tagihanStore)
+const { data, page, per_page } = storeToRefs(tagihanStore);
 
-const {
-    responseStatus,
-    error,
-} = storeToRefs(pembayaranStore)
+const { responseStatus, error } = storeToRefs(pembayaranStore);
 
-const headers: Header[] = isAdmin ? [
-  { text: "Nama", value: "name" },
-  { text: "Tanggal", value: "tgl_tagihan" },
-  { text: "Denda", value: "denda" },
-  { text: "Jumlah", value: "nominal" },
-  { text: "Status", value: "status",  },
-] : [
-  { text: "Tipe", value: "jenis_tagihan" },
-  { text: "Jumlah", value: "nominal" },
-  { text: "Tanggal", value: "tgl_tagihan" },
-  { text: "No Pembayaran", value: "no_tagihan" },
-  { text: "Status", value: "status",  },
-];
+const headers: Header[] = isAdmin
+  ? [
+      { text: "Nama", value: "name" },
+      { text: "Tanggal", value: "tgl_tagihan" },
+      { text: "Denda", value: "denda" },
+      { text: "Jumlah", value: "nominal" },
+      { text: "Setoran", value: "bulan" },
+      { text: "Status", value: "status" },
+    ]
+  : [
+      { text: "Tipe", value: "jenis_tagihan" },
+      { text: "Jumlah", value: "nominal" },
+      { text: "Tanggal", value: "tgl_tagihan" },
+      { text: "No Pembayaran", value: "no_tagihan" },
+      { text: "Setoran", value: "bulan" },
+      { text: "Status", value: "status" },
+    ];
 
 const serverOptions = {
   page: page,
   rowsPerPage: per_page,
-}
+};
 
-const onPay = async(id: number) => {
-  const tagihan = data.value.find(x => x.id === id)
-  pembayaranStore.createPemabyaran({
-    user_id: user?.id as number,
-    nominal: Number(tagihan.nominal),
-    denda: Number(tagihan.denda),
-    no_tagihan: tagihan.no_tagihan,
-  }, id)
-}
+const onPay = async (id: number) => {
+  const tagihan = data.value.find((x) => x.id === id);
+  pembayaranStore.createPemabyaran(
+    {
+      user_id: user?.id as number,
+      nominal: Number(tagihan.nominal),
+      denda: Number(tagihan.denda),
+      no_tagihan: tagihan.no_tagihan,
+    },
+    id
+  );
+};
 
-const getData = async() => {
-  tagihanStore.getTagihan()
-}
+const getData = async () => {
+  tagihanStore.getTagihan();
+};
 
-const eventSource = new EventSource(`${API_URL}transaction/sse?access_token=${user?.access_token}`);
+const eventSource = new EventSource(
+  `${API_URL}transaction/sse?access_token=${user?.access_token}`
+);
 
 onMounted(() => {
-
-  getData()
-})
+  getData();
+});
 
 watchEffect(() => {
-
   eventSource.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      console.log('data: ', data)
-      if(data.message.status){
-        getData()
-      }
+    const data = JSON.parse(event.data);
+    console.log("data: ", data);
+    if (data.message.status) {
+      getData();
+    }
   };
-
   if (!responseStatus.value) {
-    if(error.value){
+    if (error.value) {
       toast.error(error.value, {
-          position: 'top'
-      })
+        position: "top",
+      });
     }
   }
-})
-
+});
 </script>
 
 <template>
@@ -105,11 +103,7 @@ watchEffect(() => {
             class="w-[100px]"
             @click="onPay(id)"
           >
-            <p 
-              variant="primary"
-            >
-              BAYAR
-            </p>
+            <p variant="primary">BAYAR</p>
           </BaseButton>
           <p v-else>{{ status }}</p>
         </div>
@@ -154,10 +148,9 @@ watchEffect(() => {
   --easy-table-rows-per-page-selector-option-padding: 10px;
   --easy-table-rows-per-page-selector-z-index: 1;
 
-
   --easy-table-scrollbar-track-color: #2d3a4f;
   --easy-table-scrollbar-color: #2d3a4f;
-  --easy-table-scrollbar-thumb-color: #4c5d7a;;
+  --easy-table-scrollbar-thumb-color: #4c5d7a;
   --easy-table-scrollbar-corner-color: #2d3a4f;
 
   --easy-table-loading-mask-background-color: #2d3a4f;

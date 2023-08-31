@@ -4,6 +4,7 @@ import { useToast } from "vue-toast-notification";
 import { useTagihanStore } from "../../stores/tagihan";
 import { usePengajuanStore } from "~/components/features/pengajuan/stores/pengajuan";
 import { dateFormatter } from "~/utils/dayjs";
+import { formatCurrency } from "~/utils/rupiah";
 
 const router = useRouter();
 const toast = useToast();
@@ -25,31 +26,65 @@ const pengajuanRef = ref(
 );
 
 const dateRef = ref("");
-const dendaRef = ref("");
-const jumlahRef = ref("");
+const dendaRef = ref(0);
+const jumlahRef = ref(0);
+const numericValueDendaRef = ref(0);
+const numericValueJumlahRef = ref(0);
+
+function formatNominalDenda(event: InputEvent) {
+  const rawValue = (event.target as HTMLInputElement).value;
+
+  // Remove non-numeric characters and convert to number
+  numericValueDendaRef.value = parseFloat(rawValue.replace(/[^\d]/g, ""));
+
+  // Format the numeric value as Indonesian Rupiah (IDR) currency
+  dendaRef.value = formatCurrency(numericValueDendaRef.value);
+}
+
+function formatNominalJumlah(event: InputEvent) {
+  const rawValue = (event.target as HTMLInputElement).value;
+
+  // Remove non-numeric characters and convert to number
+  numericValueJumlahRef.value = parseFloat(rawValue.replace(/[^\d]/g, ""));
+
+  // Format the numeric value as Indonesian Rupiah (IDR) currency
+  jumlahRef.value = formatCurrency(numericValueJumlahRef.value);
+}
+// parsing
+function parseFormattedValueToNumber(formattedValue: string): number {
+  // Remove non-numeric characters and convert to number
+  const numericValue = parseFloat(
+    formattedValue.replace(/[^0-9,-]/g, "").replace(",", ".")
+  );
+
+  // Format the number without decimal places and thousands separators
+  return numericValue;
+}
 
 const dateNow = dateFormatter({
   dateTime: new Date(),
-  format: 'YYYY-MM-DD'
-})
+  format: "YYYY-MM-DD",
+});
 
 function onSubmit() {
+  const formattedNominalDenda = parseFormattedValueToNumber(dendaRef.value);
+  const formattedNominalJumlah = parseFormattedValueToNumber(jumlahRef.value);
   const pengajuan = dataPengajuan.value.find(
     (x: any) => x.value === pengajuanRef.value.value
   );
 
-  console.log('dateRef.value: ', dateRef.value)
+  console.log("dateRef.value: ", dateRef.value);
 
-  if(dateRef.value < dateNow){
+  if (dateRef.value < dateNow) {
     toast.error("Tanggal tidak boleh kurang dari waktu sekarang", {
-        position: "top",
-      });
-  }else{
+      position: "top",
+    });
+  } else {
     tagihanStore.createTagihan({
       user_id: pengajuan?.item?.user_id as any,
       pengajuan_id: pengajuan?.item?.id as number,
-      nominal: Number(jumlahRef.value),
-      nominal_denda: Number(dendaRef.value),
+      nominal: formattedNominalJumlah,
+      nominal_denda: formattedNominalDenda,
       tgl_tagihan: dateRef.value,
     });
   }
@@ -75,7 +110,6 @@ watchEffect(() => {
     }
   }
 });
-
 </script>
 
 <template>
@@ -102,21 +136,23 @@ watchEffect(() => {
       </BaseInput>
 
       <BaseInput
-        type="number"
+        type="text"
         id="denda"
         label="Denda"
         placeholder="Masukan Denda"
         v-model:model-value="dendaRef"
+        @input="formatNominalDenda"
       >
       </BaseInput>
 
       <BaseInput
         container-class-name="mb-3"
-        type="number"
+        type="text"
         id="jumlah"
         label="Jumlah"
         placeholder="Masukan Jumlah"
         v-model:model-value="jumlahRef"
+        @input="formatNominalJumlah"
       >
       </BaseInput>
 
